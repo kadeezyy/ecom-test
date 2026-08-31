@@ -1,0 +1,106 @@
+name: ecom-core
+
+x-app-env: &app-env
+  DATABASE_URL: postgresql+asyncpg://shop:shop@db:5432/shop
+  LOG_LEVEL: INFO
+  LOG_JSON: "true"
+  ADMIN_TOKEN: ${ADMIN_TOKEN:-dev-admin-token}
+  SUPPLIER_A_URL: http://supplier-a:9000
+  SUPPLIER_B_URL: http://supplier-b:9000
+  SUPPLIER_CONNECT_TIMEOUT_S: "1.0"
+  SUPPLIER_READ_TIMEOUT_S: "3.0"
+  SUPPLIER_MAX_ATTEMPTS: "3"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: shop
+      POSTGRES_PASSWORD: shop
+      POSTGRES_DB: shop
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shop -d shop"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  migrate:
+    build: .
+    environment: *app-env
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  seed:
+    build: .
+    environment: *app-env
+    command: ["python", "scripts/seed_catalog.py"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  api:
+    build: .
+    environment: *app-env
+    ports:
+      - "8000:8000"
+    command:
+      ["uvicorn", "shop.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://localhost:8000/healthz')\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  worker:
+    build: .
+    environment: *app-env
+    command: ["python", "-m", "shop.worker.main"]
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+
+  # Заглушки поставщиков. Доли ошибок и таймаутов настраиваются здесь либо
+  # на лету через POST /admin/config — так воспроизводятся сценарии этапа 3.
+  supplier-a:
+    build: .
+    environment:
+      STUB_NAME: a
+      STUB_MODE: random
+      STUB_FAIL_RATE: "0.2"
+      STUB_TIMEOUT_RATE: "0.2"
+      STUB_HANG_SECONDS: "10"
+      STUB_SEED: "1337"
+      STUB_KEY_OFFSET: "0"
+      STUB_KEY_LIMIT: "25"
+    ports:
+      - "9001:9000"
+    command:
+      ["uvicorn", "supplier_stub.app:app", "--host", "0.0.0.0", "--port", "9000"]
+
+  supplier-b:
+    build: .
+    environment:
+      STUB_NAME: b
+      STUB_MODE: random
+      STUB_FAIL_RATE: "0.1"
+      STUB_TIMEOUT_RATE: "0.1"
+      STUB_HANG_SECONDS: "10"
+      STUB_SEED: "7331"
+      STUB_KEY_OFFSET: "25"
+      STUB_KEY_LIMIT: "25"
+    ports:
+      - "9002:9000"
+    command:
+      ["uvicorn", "supplier_stub.app:app", "--host", "0.0.0.0", "--port", "9000"]
+
+volumes:
+  pgdata:
