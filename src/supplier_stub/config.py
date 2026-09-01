@@ -1,5 +1,3 @@
-"""Настройки заглушки поставщика."""
-
 from __future__ import annotations
 
 import json

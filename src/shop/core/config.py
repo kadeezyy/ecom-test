@@ -22,20 +22,16 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-    # --- база данных -------------------------------------------------------
     database_url: str = "postgresql+asyncpg://shop:shop@localhost:5432/shop"
     db_pool_size: int = 10
     db_max_overflow: int = 20
     db_echo: bool = False
 
-    # --- логирование -------------------------------------------------------
     log_level: str = "INFO"
     log_json: bool = True
 
-    # --- доступ ------------------------------------------------------------
     admin_token: str = "change-me-in-production"
 
-    # --- поставщики --------------------------------------------------------
     supplier_a_url: str = "http://localhost:9001"
     supplier_b_url: str = "http://localhost:9002"
     supplier_connect_timeout_s: float = 1.0
@@ -44,7 +40,6 @@ class Settings(BaseSettings):
     supplier_backoff_base_s: float = 0.2
     supplier_backoff_max_s: float = 5.0
 
-    # --- воркер ------------------------------------------------------------
     worker_poll_interval_s: float = 0.5
     worker_batch_size: int = Field(default=10, ge=1)
     job_max_attempts: int = Field(default=10, ge=1)
@@ -55,7 +50,6 @@ class Settings(BaseSettings):
     stock_sync_interval_s: int = 30
 
     def supplier_url(self, name: str) -> str:
-        """URL заглушки по её имени (``a``/``b``)."""
         match name.lower():
             case "a":
                 return self.supplier_a_url
@@ -67,5 +61,4 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """Кэшированные настройки процесса."""
     return Settings()

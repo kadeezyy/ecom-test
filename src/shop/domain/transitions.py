@@ -31,7 +31,6 @@ def is_final(status: OrderStatus) -> bool:
 
 
 def can_transition(current: OrderStatus, target: OrderStatus) -> bool:
-    """Разрешён ли переход ``current -> target``."""
     return target in ALLOWED_TRANSITIONS[current]
 
 

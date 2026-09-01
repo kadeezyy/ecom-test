@@ -1,5 +1,3 @@
-"""Витрина."""
-
 from __future__ import annotations
 
 from typing import Annotated
@@ -21,6 +19,5 @@ async def get_catalog(
     cursor: Annotated[str | None, Query(max_length=256)] = None,
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
 ) -> CatalogPageResponse:
-    """Список доступных товаров с курсорной пагинацией."""
     page = await CatalogService(session).shelf(type_=type, cursor=cursor, limit=limit)
     return shelf_to_response(page)

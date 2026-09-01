@@ -1,5 +1,3 @@
-"""Базовый класс ORM и общие миксины."""
-
 from __future__ import annotations
 
 from datetime import datetime

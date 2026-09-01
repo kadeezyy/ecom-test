@@ -1,5 +1,3 @@
-"""Выдача товара: фолбэк, повторы и защита от двойной выдачи."""
-
 from __future__ import annotations
 
 from collections.abc import Sequence
@@ -115,10 +113,6 @@ class DeliveryService:
 
         return await self._record_success(order_id, prepared, issued.code)
 
-    # ------------------------------------------------------------------
-    # Фаза 1: выбор поставщика под блокировкой заказа
-    # ------------------------------------------------------------------
-
     async def _prepare(self, order_id: str) -> _Target | DeliveryResult:
         async with self._sessionmaker() as session, session.begin():
             orders = OrderRepository(session)
@@ -161,10 +155,6 @@ class DeliveryService:
             request_id = delivery_request_id(order_id, str(target))
             await deliveries.ensure_row(order_id=order_id, supplier=target, request_id=request_id)
             return _Target(supplier=target, request_id=request_id, sku=order.sku)
-
-    # ------------------------------------------------------------------
-    # Фаза 3: фиксация результата
-    # ------------------------------------------------------------------
 
     async def _record_success(self, order_id: str, target: _Target, code: str) -> DeliveryResult:
         now = datetime.now(UTC)
@@ -361,10 +351,6 @@ class DeliveryService:
             reason=exc.reason,
         )
 
-    # ------------------------------------------------------------------
-    # Терминальные состояния
-    # ------------------------------------------------------------------
-
     async def _finalize_exhausted(
         self, session: AsyncSession, order: Order, rows: Sequence[Delivery]
     ) -> DeliveryResult:
@@ -422,10 +408,6 @@ class DeliveryService:
             payload={"request_id": delivery.request_id, "supplier": delivery.supplier},
         )
         logger.info("delivery_healed", order_id=order.id, request_id=delivery.request_id)
-
-    # ------------------------------------------------------------------
-    # Восстановление
-    # ------------------------------------------------------------------
 
     async def prepare_recovery(self, order_id: str) -> int:
         """Готовит заказ к повторной выдаче.

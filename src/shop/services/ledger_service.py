@@ -1,5 +1,3 @@
-"""Журнал денежных движений."""
-
 from __future__ import annotations
 
 from shop.core.ids import new_txn_id

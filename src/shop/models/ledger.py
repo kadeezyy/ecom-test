@@ -1,5 +1,3 @@
-"""Журнал денежных движений и аудит переходов."""
-
 from __future__ import annotations
 
 from datetime import datetime
@@ -44,7 +42,6 @@ class LedgerEntry(Base):
 
 
 class AuditLog(Base):
-    """Журнал значимых событий заказа (переходы статусов, попытки выдачи)."""
 
     __tablename__ = "audit_log"
 

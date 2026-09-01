@@ -1,5 +1,3 @@
-"""Доступ к платёжным событиям."""
-
 from __future__ import annotations
 
 from collections.abc import Sequence
@@ -93,7 +91,6 @@ class PaymentEventRepository:
         return (await self._session.execute(stmt)).scalars().all()
 
     async def list_pending_orphan_order_ids(self, limit: int = 100) -> list[str]:
-        """Заказы, по которым лежат неприменённые «осиротевшие» события."""
         stmt = (
             select(PaymentEvent.order_id)
             .where(PaymentEvent.orphan.is_(True), PaymentEvent.applied.is_(False))

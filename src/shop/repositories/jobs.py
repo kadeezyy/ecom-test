@@ -1,5 +1,3 @@
-"""Очередь фоновых задач на базе PostgreSQL."""
-
 from __future__ import annotations
 
 from collections.abc import Sequence

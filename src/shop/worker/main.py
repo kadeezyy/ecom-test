@@ -117,13 +117,10 @@ class Worker:
         return processed
 
     async def sweep_once(self) -> None:
-        """Один проход добивателя зависших заказов."""
         await self._sweeper.run_once()
 
     async def aclose(self) -> None:
         await self._suppliers.aclose()
-
-    # ------------------------------------------------------------------
 
     async def _claim(self) -> list[ClaimedJob]:
         async with self._sessionmaker() as session, session.begin():

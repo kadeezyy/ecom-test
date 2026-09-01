@@ -1,5 +1,3 @@
-"""Сверка: расхождения между деньгами и выданным товаром."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field

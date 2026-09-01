@@ -61,11 +61,6 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
             item.add_marker(skip)
 
 
-# ---------------------------------------------------------------------------
-# Заглушки поставщиков: настоящий uvicorn на эфемерном порту
-# ---------------------------------------------------------------------------
-
-
 @dataclass
 class RunningStub:
     """Запущенная заглушка + доступ к её админке."""
@@ -150,11 +145,6 @@ async def stub_b() -> AsyncIterator[RunningStub]:
         yield stub
 
 
-# ---------------------------------------------------------------------------
-# База данных
-# ---------------------------------------------------------------------------
-
-
 @pytest.fixture(scope="session")
 def migrated_database() -> str:
     """Накатывает миграции на тестовую БД один раз за сессию."""
@@ -224,10 +214,6 @@ async def catalog(sessions: async_sessionmaker[AsyncSession]) -> list[dict[str, 
         await ProductRepository(session).upsert_many(rows)
     return rows
 
-
-# ---------------------------------------------------------------------------
-# Приложение
-# ---------------------------------------------------------------------------
 
 ADMIN_TOKEN = "test-admin-token"
 

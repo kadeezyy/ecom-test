@@ -1,5 +1,3 @@
-"""Создание и чтение заказов."""
-
 from __future__ import annotations
 
 from collections.abc import Sequence

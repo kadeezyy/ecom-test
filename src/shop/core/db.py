@@ -1,5 +1,3 @@
-"""Подключение к БД и управление сессиями."""
-
 from __future__ import annotations
 
 from collections.abc import AsyncIterator

@@ -9,3 +9,15 @@ __pycache__/
 build/
 dist/
 .DS_Store
+
+venv/
+.python-version
+.env.*
+!.env.example
+.coverage
+coverage.xml
+htmlcov/
+.idea/
+.vscode/
+.claude/settings.local.json
+*.log

@@ -1,12 +1,9 @@
-"""Перечисления предметной области."""
-
 from __future__ import annotations
 
 from enum import StrEnum
 
 
 class OrderStatus(StrEnum):
-    """Статусы заказа из ТЗ."""
 
     CREATED = "created"
     PAID = "paid"
@@ -39,7 +36,6 @@ class PaymentEventStatus(StrEnum):
 
 
 class DeliveryStatus(StrEnum):
-    """Состояние попытки выдачи у конкретного поставщика."""
 
     PENDING = "pending"
     #: Код получен.

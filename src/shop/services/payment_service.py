@@ -1,5 +1,3 @@
-"""Приём платёжных вебхуков."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -24,7 +22,6 @@ logger = get_logger(__name__)
 
 @dataclass(frozen=True, slots=True)
 class PaymentWebhookCommand:
-    """Полезная нагрузка вебхука, очищенная от деталей транспорта."""
 
     event_id: str
     order_id: str
@@ -135,10 +132,6 @@ class PaymentService:
                 applied=applied_count,
             )
         return applied_count
-
-    # ------------------------------------------------------------------
-    # Применение одного события к заблокированному заказу
-    # ------------------------------------------------------------------
 
     async def _apply(
         self, order: Order, event_id: str, cmd: PaymentWebhookCommand
@@ -266,10 +259,6 @@ class PaymentService:
             },
         )
         return await self._reject(event_id, order, "amount_mismatch")
-
-    # ------------------------------------------------------------------
-    # Вспомогательное
-    # ------------------------------------------------------------------
 
     @staticmethod
     def _is_stale(order: Order, cmd: PaymentWebhookCommand) -> bool:

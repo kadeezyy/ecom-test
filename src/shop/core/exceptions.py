@@ -14,7 +14,6 @@ from __future__ import annotations
 
 
 class DomainError(Exception):
-    """Базовая доменная ошибка."""
 
     code: str = "domain_error"
     http_status: int = 400
@@ -44,14 +43,12 @@ class ProductInactive(DomainError):
 
 
 class InvalidTransition(DomainError):
-    """Попытка недопустимого перехода статуса заказа."""
 
     code = "invalid_transition"
     http_status = 409
 
 
 class AmountMismatch(DomainError):
-    """Сумма/валюта вебхука не совпали с заказом."""
 
     code = "amount_mismatch"
     http_status = 422
@@ -62,13 +59,7 @@ class Unauthorized(DomainError):
     http_status = 401
 
 
-# ---------------------------------------------------------------------------
-# Интеграция с поставщиком
-# ---------------------------------------------------------------------------
-
-
 class SupplierError(Exception):
-    """Базовая ошибка интеграции с поставщиком."""
 
     def __init__(self, message: str, *, supplier: str, request_id: str) -> None:
         super().__init__(message)

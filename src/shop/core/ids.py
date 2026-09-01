@@ -1,5 +1,3 @@
-"""Генерация и деривация идентификаторов."""
-
 from __future__ import annotations
 
 import uuid
@@ -10,12 +8,10 @@ TXN_PREFIX = "txn_"
 
 
 def new_order_id() -> str:
-    """Новый идентификатор заказа."""
     return f"{ORDER_PREFIX}{uuid.uuid4().hex[:16]}"
 
 
 def new_txn_id() -> str:
-    """Идентификатор группы проводок в журнале денежных движений."""
     return f"{TXN_PREFIX}{uuid.uuid4().hex[:16]}"
 
 

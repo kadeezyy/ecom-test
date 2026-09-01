@@ -1,5 +1,3 @@
-"""Доступ к заказам."""
-
 from __future__ import annotations
 
 from collections.abc import Sequence
@@ -38,7 +36,6 @@ class OrderRepository:
     async def list_unsettled(
         self, statuses: Sequence[OrderStatus], limit: int = 500
     ) -> Sequence[Order]:
-        """Заказы в незавершённых статусах — для отчёта сверки."""
         stmt = (
             select(Order)
             .where(Order.status.in_([str(s) for s in statuses]))

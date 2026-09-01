@@ -69,7 +69,6 @@ def get_logger(name: str) -> Any:
 
 
 def bind_request_context(**kwargs: Any) -> None:
-    """Кладёт сквозные поля (order_id, event_id, ...) в contextvars."""
     structlog.contextvars.bind_contextvars(**kwargs)
 
 

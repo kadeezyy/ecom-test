@@ -47,7 +47,6 @@ class IssuedCode:
 
 
 class SupplierClient:
-    """Клиент одной заглушки-поставщика."""
 
     def __init__(
         self,

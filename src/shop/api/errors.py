@@ -1,5 +1,3 @@
-"""Единая трансляция исключений в HTTP-ответы."""
-
 from __future__ import annotations
 
 from fastapi import FastAPI, Request

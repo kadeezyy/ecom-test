@@ -1,5 +1,3 @@
-"""Заказы и события платёжной системы."""
-
 from __future__ import annotations
 
 from datetime import datetime

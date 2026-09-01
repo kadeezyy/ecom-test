@@ -1,5 +1,3 @@
-"""Схемы запросов и ответов. Только форма данных, без бизнес-логики."""
-
 from __future__ import annotations
 
 from datetime import datetime

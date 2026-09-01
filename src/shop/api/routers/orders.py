@@ -1,5 +1,3 @@
-"""Эндпоинты заказов."""
-
 from __future__ import annotations
 
 from typing import Annotated
@@ -20,7 +18,6 @@ async def create_order(
     session: SessionDep,
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
 ) -> OrderResponse:
-    """Создаёт заказ по SKU."""
     service = OrderService(session)
     order = await service.create_order(sku=body.sku, idempotency_key=idempotency_key)
     code = await service.get_delivered_code(order.id)
@@ -30,7 +27,6 @@ async def create_order(
 
 @router.get("/{order_id}", response_model=OrderResponse)
 async def get_order(order_id: str, session: SessionDep) -> OrderResponse:
-    """Возвращает заказ, его статус и выданный код."""
     service = OrderService(session)
     order = await service.get_order(order_id)
     code = await service.get_delivered_code(order_id)

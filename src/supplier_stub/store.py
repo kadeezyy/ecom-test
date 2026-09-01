@@ -85,5 +85,4 @@ class KeyStore:
 
     @property
     def total(self) -> int:
-        """Размер исходного пула."""
         return len(self._initial)

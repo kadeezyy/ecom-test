@@ -1,5 +1,3 @@
-"""Зависимости FastAPI."""
-
 from __future__ import annotations
 
 import hmac
@@ -43,7 +41,6 @@ async def require_admin(
     settings: SettingsDep,
     x_admin_token: Annotated[str | None, Header(alias="X-Admin-Token")] = None,
 ) -> None:
-    """Простая защита админских эндпоинтов статическим токеном из окружения."""
     if x_admin_token is None or not hmac.compare_digest(x_admin_token, settings.admin_token):
         raise Unauthorized("valid X-Admin-Token header is required")
 
